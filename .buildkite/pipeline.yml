@@ -1,4 +1,3 @@
 steps:
   - label: ":fastlane: test"
-    command: "bundle install --path build/bundle"
-    command: "bundle exec fastlane test"
+    command: "bundle install --path build/bundle && bundle exec fastlane test"
