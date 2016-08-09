@@ -1,15 +1,27 @@
 default_platform :ios
 
 platform :ios do
-  before_all do
-    ipa scheme: 'Buildkite Fastlane Demo'
-  end
+#  before_all do
+#    ipa scheme: 'Buildkite Fastlane Demo'
+#  end
 
   desc "Runs all the tests"
   lane :test do
-    xctest scheme: 'Buildkite Fastlane Demo',
-           sdk: 'iphonesimulator',
-           destination: 'platform=iOS Simulator,name=iPhone 6s,OS=9.3',
-           derivedDataPath: './fastlane/xcodebuild-data'
-  end
+    xcclean
+	xctest(
+		sdk: 'iphonesimulator',
+		destination: 'platform=iOS Simulator,name=iPhone 6s,OS=9.3',
+        derivedDataPath: './fastlane/xcodebuild-data',
+		destination_timeout: 120, # increase device/simulator timeout, usually used on slow CI boxes
+		reports: [{
+			report: 'html',
+			output: './build-dir/test-report.html',  # will use XCODE_BUILD_PATH/report, if output is not provided
+#			screenshots: 1
+		},
+		{
+			report: 'junit',
+			output: './build-dir/test-report.xml'
+		}]
+	)    
+	end
 end
